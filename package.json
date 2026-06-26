@@ -1,0 +1,41 @@
+{
+  "name": "afya-c",
+  "version": "1.0.0",
+  "description": "AI-Native Medical Centre Management System - Phase 1",
+  "author": "AFYA-C Engineering Team",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
+  "scripts": {
+    "dev": "nx dev",
+    "build": "nx build",
+    "test": "nx test",
+    "lint": "nx lint",
+    "e2e": "nx e2e",
+    "affected": "nx affected",
+    "affected:test": "nx affected:test",
+    "affected:lint": "nx affected:lint",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f"
+  },
+  "nxLink": {
+    "packageManager": "npm"
+  },
+  "dependencies": {
+    "node": ">= 18.0.0",
+    "npm": ">= 9.0.0"
+  },
+  "devDependencies": {
+    "@nx/nest": "^23.0.1",
+    "@nx/workspace": "latest",
+    "@types/node": "^20.0.0",
+    "nx": "latest",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  }
+}

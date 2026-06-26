@@ -1,0 +1,7 @@
+module.exports = {
+  sourceRoot: __dirname + '/apps/api/src',
+  outputPath: __dirname + '/dist/apps/api',
+  root: __dirname + '/apps/api/src',
+  tsConfigPath: __dirname + '/tsconfig.nest.json',
+  name: 'api'
+};

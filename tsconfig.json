@@ -1,0 +1,23 @@
+{ "compilerOptions": {
+  "target": "ES2022",
+  "module": "ESNext",
+  "moduleResolution": "node",
+  
+  "lib": ["ES2022"],
+  
+  "strict": true,
+  "esModuleInterop": true,
+  "skipLibCheck": true,
+  "forceConsistentCasingInFileNames": true,
+  "resolveJsonModule": true,
+  
+  "outDir": "./dist",
+  
+  "baseUrl": ".",
+  "paths": {
+    "@afya-core/*": ["libs/*/src"],
+    "@shared/*": ["libs/*/src"]
+  },
+  
+  "typeRoots": ["./node_modules/@types", "./libs/*/src/types"]
+}, "include": ["**/*.ts"], "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"] }

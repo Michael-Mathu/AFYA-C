@@ -1,0 +1,44 @@
+# Ignore everything in root except specific directories
+/*
+!.gitignore
+!.github/
+!apps/
+!docs/
+!scripts/
+!docker/
+!package.json
+!tsconfig.json
+!tsconfig.nest.json
+!tsconfig.react.json
+!nx.json
+!setup.sh
+!docker-compose.yml
+
+# Ignore node_modules in all directories
+**/node_modules/
+**/dist/
+**/build/
+
+# Ignore logs
+*.log
+
+# Ignore env files
+.env
+.env.local
+.env.*.local
+
+# Ignore IDE files
+.vscode/
+.idea/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore test coverage
+coverage/
+.nyc_output/
+
+# Ignore temporary files
+*.tmp
+*.temp

@@ -1,0 +1,7 @@
+module.exports = {
+  sourceRoot: __dirname + '/apps/web/src',
+  outputPath: __dirname + '/dist/apps/web',
+  root: __dirname + '/apps/web/src',
+  tsConfigPath: __dirname + '/tsconfig.react.json',
+  name: 'web'
+};

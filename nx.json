@@ -1,0 +1,30 @@
+{ "extends": "@nx/nest",
+  "plugins": [
+    {
+      "name": "@nx/nest-typeorm/plugin",
+      "options": {
+        "root": "apps/api/src",
+        "sourceRoot": "apps/api/src"
+      }
+    }
+  ],
+  "targets": {
+    "build": {
+      "configurations": {
+        "production": {
+          "optimization": true
+        }
+      }
+    },
+    "test": {
+      "configurations": {
+        "unit": { "ignoreTestPattern": "**/*.e2e-spec.ts" },
+        "integration": {
+          "extraArgs": {
+            "spec": "**/*.e2e-spec.ts"
+          }
+        }
+      }
+    }
+  }
+}
