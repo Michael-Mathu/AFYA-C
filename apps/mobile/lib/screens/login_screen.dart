@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'api_service.dart';
+import 'package:go_router/go_router.dart';
+import '../models/api_service.dart';
 
-// Authentication Provider
-final authProvider = StateProvider<bool>((ref) => false);
-final userProvider = StateProvider<Map<String, dynamic>?>((ref) => null);
 final isLoadingProvider = StateProvider<bool>((ref) => false);
 final errorMessageProvider = StateProvider<String?>((ref) => null);
 
-// Login Screen Implementation
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 

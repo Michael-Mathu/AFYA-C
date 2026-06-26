@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'screens/login_screen.dart';
+import 'screens/appointments_screen.dart';
+import 'screens/medical_records_screen.dart';
+import 'screens/messaging_screen.dart';
+import 'screens/prescriptions_screen.dart';
+import 'screens/lab_results_screen.dart';
+import 'screens/billing_screen.dart';
 import 'models/api_service.dart';
 
 void main() async {
@@ -62,28 +71,41 @@ class AFYAMobileApp extends StatelessWidget {
   }
 }
 
-// Placeholder screens - would be implemented in separate files
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(child: Text('Login Screen', style: TextStyle(fontSize: 24))),
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('AFYA-C Mobile')),
-      body: const Center(child: Text('Home Screen')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Welcome, ${user != null ? '${user['firstName']} ${user['lastName']}' : 'Patient'}',
+            ),
+            const SizedBox(height: 16),
+            Text('MRN: ${user != null ? user['mrn'] : 'N/A'}'),
+          ],
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              break;
+            case 1:
+              context.go('/appointments');
+              break;
+            case 2:
+              context.go('/messaging');
+              break;
+          }
+        },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Appointments'),
@@ -92,59 +114,5 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class AppointmentsScreen extends StatelessWidget {
-  const AppointmentsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: const Text('Appointments')));
-  }
-}
-
-class MedicalRecordsScreen extends StatelessWidget {
-  const MedicalRecordsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: const Text('Medical Records')));
-  }
-}
-
-class MessagingScreen extends StatelessWidget {
-  const MessagingScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: const Text('Messages')));
-  }
-}
-
-class PrescriptionsScreen extends StatelessWidget {
-  const PrescriptionsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: const Text('Prescriptions')));
-  }
-}
-
-class LabResultsScreen extends StatelessWidget {
-  const LabResultsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: const Text('Lab Results')));
-  }
-}
-
-class BillingScreen extends StatelessWidget {
-  const BillingScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: const Text('Billing')));
   }
 }
