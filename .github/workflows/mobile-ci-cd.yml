@@ -1,0 +1,79 @@
+name: AFYA-C Mobile CI/CD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/mobile/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/mobile/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        flutter-version: ['3.16.0', '3.19.0']
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/setup-flutter@v2
+        with:
+          flutter-version: ${{ matrix.flutter-version }}
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: |
+          cd apps/mobile
+          flutter pub get
+
+      - name: Verify formatting
+        run: |
+          cd apps/mobile
+          flutter format --dry-run .
+
+      - name: Analyze code
+        run: |
+          cd apps/mobile
+          flutter analyze
+
+      - name: Run tests
+        run: |
+          cd apps/mobile
+          flutter test --coverage
+
+      - name: Build APK
+        run: |
+          cd apps/mobile
+          flutter build apk --release
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./apps/mobile/coverage/lcov.info
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/setup-flutter@v2
+        with:
+          flutter-version: '3.19.0'
+
+      - name: Build APK
+        run: |
+          cd apps/mobile
+          flutter build apk --release
+
+      - name: Upload APK to Firebase
+        uses: firebase-actions/upload-apk@v1
+        with:
+          gcp_project_number: ${{ secrets.GCP_PROJECT_NUMBER }}
+          gcp_certificate: ${{ secrets.GCP_CERTIFICATE }}
+          track: production
+          release_notes: Automated build ${{ github.sha }}
