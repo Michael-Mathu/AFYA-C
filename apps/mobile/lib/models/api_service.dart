@@ -43,13 +43,28 @@ class ApiService {
 
   Future<Map<String, dynamic>>? bookAppointment({
     required DateTime appointmentDate,
-    required String department,
-    required String type,
+    required String doctorId,
+    required String typeId,
     required String reason,
-    required String priority,
     String? notes,
-  }) {
-    return null;
+  }) async {
+    try {
+      final response = await http.post(
+        '/appointments',
+        body: {
+          'appointmentDate': appointmentDate.toIso8601String(),
+          'doctorId': doctorId,
+          'typeId': typeId,
+          'reason': reason,
+          if (notes != null) 'notes': notes,
+        },
+        headers: headers,
+      );
+      
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to book appointment: $e');
+    }
   }
 
   Future<List<dynamic>> getConversations() async {

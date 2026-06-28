@@ -1,12 +1,11 @@
-import { Injectable, NotFoundException, ConflictException, InjectRepository } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RecursivePartial } from 'src/common/types/recursive-partial.type';
-import { User } from '../core/entities/user.entity';
-import { Role } from '../core/entities/role.entity';
-import { Permission } from '../core/entities/permission.entity';
-import { UserRole } from '../core/entities/user-role.entity';
-import { Audit } from '../core/entities/audit.entity';
+import { User } from '../../core/entities/user.entity';
+import { Role } from '../../core/entities/role.entity';
+import { Permission } from '../../core/entities/permission.entity';
+import { UserRole } from '../../core/entities/user-role.entity';
+import { Audit } from '../../core/entities/audit.entity';
 
 @Injectable()
 export class AuthService {
@@ -38,9 +37,9 @@ export class AuthService {
       ...userData,
       passwordHash: await this.hashPassword(password),
       isActive: true,
-    });
+    }) as any;
 
-    const savedUser = await this.usersRepository.save(user);
+    const savedUser = await this.usersRepository.save(user) as any;
     
     // Log audit entry
     await this.logAudit('CREATE', 'user', savedUser.id, null, savedUser, req);

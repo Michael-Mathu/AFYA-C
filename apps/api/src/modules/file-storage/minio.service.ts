@@ -15,7 +15,7 @@ export class MinioClientService {
     this.bucket = this.configService.getMinio().bucket;
   }
 
-  async uploadFile(file: Express.Multer.File, user: any): Promise<{ url: string; filename: string }> {
+  async uploadFile(file: any, user: any): Promise<{ url: string; filename: string }> {
     // Generate unique filename
     const uniqueFilename = `${Date.now()}-${file.originalname}`;
 

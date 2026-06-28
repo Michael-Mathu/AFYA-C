@@ -21,7 +21,7 @@ export class FileStorageController {
   @ApiResponse({ status: 201, description: 'File uploaded successfully' })
   @ApiBody({ type: 'file' })
   async uploadFile(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: any,
     @Request() req
   ): Promise<{ url: string; filename: string }> {
     return this.minioClientService.uploadFile(file, req.user);

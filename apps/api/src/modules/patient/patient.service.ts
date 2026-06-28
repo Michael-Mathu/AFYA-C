@@ -8,7 +8,7 @@ import { Allergy } from './entities/allergy.entity';
 import { Insurance } from './entities/insurance.entity';
 import { EmergencyContact } from './entities/emergency-contact.entity';
 import { NextOfKin } from './entities/next-of-kin.entity';
-import { User } from '../core/entities/user.entity';
+import { User } from '../../core/entities/user.entity';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 import { PatientFilterDto } from './dto/patient-filter.dto';

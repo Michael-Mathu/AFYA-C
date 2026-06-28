@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, ConflictException, InjectRepository } fr
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Patient } from '../patient/entities/patient.entity';
-import { User } from '../core/entities/user.entity';
+import { User } from '../../core/entities/user.entity';
 import { Consultation } from '../consultation/entities/consultation.entity';
 import { LabTestCatalogue } from './entities/lab-test-catalogue.entity';
 import { LabRequest } from './entities/lab-request.entity';

@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm';
-import { User } from '../core/entities/user.entity';
+import { User } from '../../../core/entities/user.entity';
 import { Allergy } from './entities/allergy.entity';
 import { Insurance } from './entities/insurance.entity';
 import { EmergencyContact } from './entities/emergency-contact.entity';

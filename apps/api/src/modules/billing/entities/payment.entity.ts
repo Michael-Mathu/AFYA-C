@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Bill } from './bill.entity';
 import { Patient } from '../patient/entities/patient.entity';
-import { User } from '../core/entities/user.entity';
+import { User } from '../../../core/entities/user.entity';
 
 @Entity('payments')
 export class Payment {

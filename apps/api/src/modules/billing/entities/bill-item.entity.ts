@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Bill } from './bill.entity';
-import { User } from '../core/entities/user.entity';
+import { User } from '../../../core/entities/user.entity';
 import { Patient } from '../patient/entities/patient.entity';
 
 @Entity('bill_items')

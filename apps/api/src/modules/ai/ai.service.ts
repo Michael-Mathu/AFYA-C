@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { User } from '../core/entities/user.entity';
+import { User } from '../../core/entities/user.entity';
 import { Patient } from '../patient/entities/patient.entity';
 import { Consultation } from '../consultation/entities/consultation.entity';
 import { AiAuditLog } from './entities/ai-audit-log.entity';

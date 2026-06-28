@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, OneToOne, JoinTable } from 'typeorm';
 import { UserRole } from './user-role.entity';
 import { Audit } from './audit.entity';
+import { Role } from './role.entity';
 
 @Entity('users')
 export class User {
@@ -42,4 +43,12 @@ export class User {
 
   @OneToMany(() => Audit, audit => audit.user)
   audits: Audit[];
+
+  @OneToOne(() => Role)
+  @JoinTable({
+    name: 'user_roles',
+    joinColumn: { name: 'userId', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'roleId', referencedColumnName: 'id' },
+  })
+  role: Role;
 }

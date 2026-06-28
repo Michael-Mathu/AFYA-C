@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { User } from '../core/entities/user.entity';
+import { User } from '../../../core/entities/user.entity';
 import { Patient } from '../patient/entities/patient.entity';
 
 @Entity('ai_audit_log')

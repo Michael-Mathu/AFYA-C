@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'screens/login_screen.dart';
+import 'screens/home_screen.dart';
 import 'screens/appointments_screen.dart';
+import 'screens/appointment_booking_screen.dart';
 import 'screens/medical_records_screen.dart';
 import 'screens/messaging_screen.dart';
 import 'screens/prescriptions_screen.dart';
 import 'screens/lab_results_screen.dart';
 import 'screens/billing_screen.dart';
+import 'screens/profile_screen.dart';
 import 'models/api_service.dart';
 
 void main() async {
@@ -45,6 +48,10 @@ class AFYAMobileApp extends StatelessWidget {
             builder: (context, state) => const AppointmentsScreen(),
           ),
           GoRoute(
+            path: '/appointments/book',
+            builder: (context, state) => const AppointmentBookingScreen(),
+          ),
+          GoRoute(
             path: '/records',
             builder: (context, state) => const MedicalRecordsScreen(),
           ),
@@ -64,55 +71,13 @@ class AFYAMobileApp extends StatelessWidget {
             path: '/billing',
             builder: (context, state) => const BillingScreen(),
           ),
+          GoRoute(
+            path: '/profile',
+            builder: (context, state) => const ProfileScreen(),
+          ),
         ],
       ),
       debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class HomeScreen extends ConsumerWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider);
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('AFYA-C Mobile')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Welcome, ${user != null ? '${user['firstName']} ${user['lastName']}' : 'Patient'}',
-            ),
-            const SizedBox(height: 16),
-            Text('MRN: ${user != null ? user['mrn'] : 'N/A'}'),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              break;
-            case 1:
-              context.go('/appointments');
-              break;
-            case 2:
-              context.go('/messaging');
-              break;
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Appointments'),
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Messages'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-      ),
     );
   }
 }

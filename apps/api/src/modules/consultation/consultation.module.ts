@@ -8,6 +8,8 @@ import { Diagnosis } from './entities/diagnosis.entity';
 import { Prescription } from './entities/prescription.entity';
 import { LabRequest } from './entities/lab-request.entity';
 import { AiService } from '../ai/ai.service';
+import { AppointmentModule } from '../appointment/appointment.module';
+import { QueueModule } from '../queue/queue.module';
 
 @Module({
   imports: [
@@ -18,9 +20,11 @@ import { AiService } from '../ai/ai.service';
       Prescription,
       LabRequest,
     ]),
+    AppointmentModule,
+    QueueModule,
   ],
   controllers: [ConsultationController],
   providers: [ConsultationService, AiService],
-  exports: [ConsultationService],
+  exports: [ConsultationService, AppointmentModule, QueueModule],
 })
 export class ConsultationModule {}

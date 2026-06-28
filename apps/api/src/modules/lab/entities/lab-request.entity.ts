@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Consultation } from '../consultation/entities/consultation.entity';
 import { Patient } from '../patient/entities/patient.entity';
-import { User } from '../core/entities/user.entity';
+import { User } from '../../../core/entities/user.entity';
 import { LabTestCatalogue } from './lab-test-catalogue.entity';
 
 @Entity('lab_requests')

@@ -12,6 +12,9 @@ export class ConfigService {
         env: nestConfigService.get('NODE_ENV', 'development'),
         port: parseInt(nestConfigService.get('PORT', '3000'), 10),
         apiPrefix: nestConfigService.get('API_PREFIX', 'api'),
+        timezone: nestConfigService.get('TZ', 'Africa/Nairobi'),
+        currency: nestConfigService.get('CURRENCY_CODE', 'KES'),
+        locale: nestConfigService.get('LOCALE', 'en'),
       },
       database: {
         url: nestConfigService.get('DATABASE_URL'),
@@ -65,11 +68,7 @@ export class ConfigService {
         pin: nestConfigService.get('KRA_PIN'),
         vatRate: parseFloat(nestConfigService.get('VAT_RATE', '0.16')),
       },
-      app: {
-        timezone: nestConfigService.get('TZ', 'Africa/Nairobi'),
-        currency: nestConfigService.get('CURRENCY_CODE', 'KES'),
-        locale: nestConfigService.get('LOCALE', 'en'),
-      },
+
       security: {
         rateLimitWindow: parseInt(nestConfigService.get('RATE_LIMIT_WINDOW', '60000'), 10),
         rateLimitMax: parseInt(nestConfigService.get('RATE_LIMIT_MAX', '100'), 10),
