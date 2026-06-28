@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { appointmentApi } from '@/lib/api';
-import { useAuth } from '@/App';
+import type { Appointment } from '@/lib/api';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Calendar, Clock, MapPin, Plus, X, Loader2, CheckCircle } from 'lucide-react';
+import { Calendar, Clock, Plus, X, Loader2, CheckCircle } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/utils';
 
 export default function AppointmentsPage() {
-  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [showBooking, setShowBooking] = useState(false);
   const [bookingForm, setBookingForm] = useState({
@@ -20,10 +20,12 @@ export default function AppointmentsPage() {
     notes: '',
   });
 
-  const { data: appointments, isLoading } = useQuery({
+  const { data: appointmentsResponse, isLoading } = useQuery({
     queryKey: ['appointments'],
     queryFn: () => appointmentApi.list(),
   });
+
+  const appointments: Appointment[] = appointmentsResponse?.data?.data || [];
 
   const cancelMutation = useMutation({
     mutationFn: (id: string) => appointmentApi.cancel(id),
@@ -32,12 +34,12 @@ export default function AppointmentsPage() {
     },
   });
 
-  const upcomingAppointments = appointments?.data?.filter(
-    (a) => a.status === 'SCHEDULED' && new Date(a.appointmentDate) > new Date()
+  const upcomingAppointments = appointments.filter(
+    (a: Appointment) => a.status === 'SCHEDULED' && new Date(a.appointmentDate) > new Date()
   ) || [];
 
-  const pastAppointments = appointments?.data?.filter(
-    (a) => a.status !== 'SCHEDULED' || new Date(a.appointmentDate) <= new Date()
+  const pastAppointments = appointments.filter(
+    (a: Appointment) => a.status !== 'SCHEDULED' || new Date(a.appointmentDate) <= new Date()
   ) || [];
 
   return (

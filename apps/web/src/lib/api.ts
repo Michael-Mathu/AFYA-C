@@ -34,7 +34,7 @@ const USERS: Record<string, { password: string; user: any }> = {
 
 const DOCTOR = USERS['doctor@afya-c.com'].user;
 
-let appointments: any[] = [
+let appointments: Appointment[] = [
   { id: 'a1', type: { id: 't1', name: 'General Consultation', durationMinutes: 30, price: 2000 }, doctor: DOCTOR, patient: { id: 'p001', firstName: 'John', lastName: 'Doe', mrn: 'MRN-001' }, appointmentDate: new Date(Date.now() + 86400000).toISOString(), reason: 'Annual checkup', status: 'SCHEDULED', createdAt: new Date().toISOString() },
   { id: 'a2', type: { id: 't2', name: 'Follow-up', durationMinutes: 15, price: 1000 }, doctor: DOCTOR, patient: { id: 'p001', firstName: 'John', lastName: 'Doe', mrn: 'MRN-001' }, appointmentDate: new Date(Date.now() + 172800000).toISOString(), reason: 'Blood pressure check', status: 'SCHEDULED', createdAt: new Date().toISOString() },
 ];
@@ -55,8 +55,9 @@ function getPatient() {
     email: u?.user.email || 'patient@afya-c.com',
     address: '123 Nairobi Street, Nairobi',
     idNumber: 'ID123456',
-    allergies: [{ id: 'all-1', name: 'Penicillin', severity: 'MODERATE' }],
-    insurance: { provider: 'NHIF', policyNumber: 'NHIF-001', expiryDate: '2024-12-31' },
+    bloodType: 'O+',
+    allergies: [{ id: 'all-1', allergen: 'Penicillin', severity: 'MODERATE' }],
+    insurance: { provider: 'NHIF', policyNumber: 'NHIF-001', insuranceNumber: 'NHIF001', expiryDate: '2024-12-31' },
     emergencyContact: { name: 'Jane Doe', phone: '+254712345679', relationship: 'Spouse' },
   };
 }
@@ -85,6 +86,7 @@ export interface Patient {
   email?: string;
   address?: string;
   idNumber?: string;
+  bloodType?: string;
   allergies?: any[];
   insurance?: any;
   emergencyContact?: any;
@@ -147,7 +149,7 @@ export const authApi = {
     console.log(`[MOCK] Login: ${email}`);
     return { data: { access_token, user: u.user }, status: 200 };
   },
-  register: async (data: any): Promise<MockResponse<{ message: string }>> => {
+  register: async (_data: any): Promise<MockResponse<{ message: string }>> => {
     await delay();
     return { data: { message: 'Registration successful' }, status: 201 };
   },
@@ -169,7 +171,7 @@ export const patientApi = {
 };
 
 export const appointmentApi = {
-  list: async (params?: any): Promise<MockResponse<{ data: Appointment[]; total: number }>> => {
+  list: async (_params?: any): Promise<MockResponse<{ data: Appointment[]; total: number }>> => {
     await delay();
     return { data: { data: [...appointments], total: appointments.length }, status: 200 };
   },
@@ -197,13 +199,13 @@ export const appointmentApi = {
     appointments = appointments.map(a => a.id === id ? { ...a, status: 'CANCELLED' } : a);
     return { data: { message: 'Appointment cancelled' }, status: 200 };
   },
-  complete: async (id: string): Promise<MockResponse<{ message: string }>> => {
+  complete: async (_id: string): Promise<MockResponse<{ message: string }>> => {
     await delay();
     return { data: { message: 'Appointment completed' }, status: 200 };
   },
-  checkAvailability: async (doctorId: string, date: string, duration: number): Promise<MockResponse<{ available: boolean }>> => {
+  checkAvailability: async (_doctorId: string, _date: string, _duration: number): Promise<MockResponse<{ available: boolean; slots: string[] }>> => {
     await delay();
-    return { data: { available: true }, status: 200 };
+    return { data: { available: true, slots: ['09:00', '10:00', '11:00', '14:00', '15:00'] }, status: 200 };
   },
 };
 
@@ -212,12 +214,12 @@ export const billingApi = {
     await delay();
     return { data: getBills(), status: 200 };
   },
-  get: async (id: string): Promise<MockResponse<Bill>> => {
+  get: async (_id: string): Promise<MockResponse<Bill>> => {
     await delay();
     return { data: getBills()[0], status: 200 };
   },
-  pay: async (billId: string, data: any): Promise<MockResponse<{ message: string }>> => {
-    await delay();
+  pay: async (_billId: string, _data: any): Promise<MockResponse<{ message: string }>> => {
+    await delay(500);
     return { data: { message: 'Payment successful' }, status: 200 };
   },
 };
@@ -227,7 +229,7 @@ export const medicalRecordApi = {
     await delay();
     return { data: getRecords(), status: 200 };
   },
-  get: async (id: string): Promise<MockResponse<MedicalRecord>> => {
+  get: async (_id: string): Promise<MockResponse<MedicalRecord>> => {
     await delay();
     return { data: getRecords()[0], status: 200 };
   },
@@ -242,8 +244,8 @@ function getRecords(): MedicalRecord[] {
     objective: 'Blood Pressure: 120/80, Temperature: 36.8°C, Weight: 72kg, Heart Rate: 72bpm',
     assessment: 'Common cold, possibly viral infection. Patient is generally healthy.',
     plan: '1. Rest for 2-3 days\n2. Increase fluid intake\n3. Paracetamol 500mg as needed\n4. Follow up in 1 week if symptoms persist',
-    diagnoses: [{ id: 'dx-1', name: 'Upper Respiratory Tract Infection', icd10Code: 'J06.9' }],
-    prescriptions: [{ id: 'rx-1', medication: 'Paracetamol 500mg', dosage: '1 tablet', frequency: 'Every 6 hours', duration: '5 days' }],
+    diagnoses: [{ id: 'dx-1', name: 'Upper Respiratory Tract Infection', icd10Code: 'J06.9', icdCode: 'J06.9', description: 'Upper Respiratory Tract Infection' }],
+    prescriptions: [{ id: 'rx-1', medication: 'Paracetamol 500mg', medicationName: 'Paracetamol 500mg', dosage: '1 tablet', frequency: 'Every 6 hours', duration: '5 days', durationDays: '5' }],
     status: 'COMPLETED',
   }];
 }

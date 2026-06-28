@@ -1,14 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { patientApi } from '@/lib/api';
-import { useAuth } from '@/App';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { User, Mail, Phone, MapPin, Shield, Heart, AlertTriangle, Loader2 } from 'lucide-react';
 
 export default function ProfilePage() {
-  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -19,19 +17,25 @@ export default function ProfilePage() {
     email: '',
   });
 
-  const { data: patient, isLoading } = useQuery({
+  const { data: patientResp, isLoading } = useQuery({
     queryKey: ['patient-profile'],
     queryFn: () => patientApi.getProfile(),
-    onSuccess: (data) => {
-      setFormData({
-        firstName: data.data.firstName || '',
-        lastName: data.data.lastName || '',
-        phone: data.data.phone || '',
-        address: data.data.address || '',
-        email: data.data.email || '',
-      });
-    },
   });
+
+  const patient = patientResp?.data;
+
+  // Populate form when data loads
+  useEffect(() => {
+    if (patient && !isEditing) {
+      setFormData({
+        firstName: patient.firstName || '',
+        lastName: patient.lastName || '',
+        phone: patient.phone || '',
+        address: patient.address || '',
+        email: patient.email || '',
+      });
+    }
+  }, [patient, isEditing]);
 
   const updateMutation = useMutation({
     mutationFn: (data: any) => patientApi.updateProfile(data),
@@ -147,7 +151,7 @@ export default function ProfilePage() {
                     <div>
                       <p className="text-sm text-gray-500">Full Name</p>
                       <p className="font-medium">
-                        {patient?.data?.firstName} {patient?.data?.lastName}
+                        {patient?.firstName} {patient?.lastName}
                       </p>
                     </div>
                   </div>
@@ -155,21 +159,21 @@ export default function ProfilePage() {
                     <Mail className="h-5 w-5 text-gray-400" />
                     <div>
                       <p className="text-sm text-gray-500">Email</p>
-                      <p className="font-medium">{patient?.data?.email || 'Not provided'}</p>
+                      <p className="font-medium">{patient?.email || 'Not provided'}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <Phone className="h-5 w-5 text-gray-400" />
                     <div>
                       <p className="text-sm text-gray-500">Phone</p>
-                      <p className="font-medium">{patient?.data?.phone || 'Not provided'}</p>
+                      <p className="font-medium">{patient?.phone || 'Not provided'}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <MapPin className="h-5 w-5 text-gray-400" />
                     <div>
                       <p className="text-sm text-gray-500">Address</p>
-                      <p className="font-medium">{patient?.data?.address || 'Not provided'}</p>
+                      <p className="font-medium">{patient?.address || 'Not provided'}</p>
                     </div>
                   </div>
                 </div>
@@ -183,20 +187,20 @@ export default function ProfilePage() {
               <CardDescription>Your insurance coverage details</CardDescription>
             </CardHeader>
             <CardContent>
-              {patient?.data?.insurance ? (
+              {patient?.insurance ? (
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <Shield className="h-5 w-5 text-gray-400" />
                     <div>
                       <p className="text-sm text-gray-500">Provider</p>
-                      <p className="font-medium">{patient.data.insurance.provider}</p>
+                      <p className="font-medium">{patient.insurance.provider}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <Shield className="h-5 w-5 text-gray-400" />
                     <div>
                       <p className="text-sm text-gray-500">Policy Number</p>
-                      <p className="font-medium">{patient.data.insurance.insuranceNumber}</p>
+                      <p className="font-medium">{patient.insurance.insuranceNumber || patient.insurance.policyNumber}</p>
                     </div>
                   </div>
                 </div>
@@ -217,14 +221,14 @@ export default function ProfilePage() {
                 <Heart className="h-5 w-5 text-green-600" />
                 <div>
                   <p className="text-sm text-gray-500">Blood Type</p>
-                  <p className="font-medium">{patient?.data?.bloodType || 'Not recorded'}</p>
+                  <p className="font-medium">{patient?.bloodType || 'Not recorded'}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
                 <User className="h-5 w-5 text-blue-600" />
                 <div>
                   <p className="text-sm text-gray-500">MRN</p>
-                  <p className="font-medium font-mono">{patient?.data?.mrn}</p>
+                  <p className="font-medium font-mono">{patient?.mrn}</p>
                 </div>
               </div>
             </CardContent>
@@ -235,9 +239,9 @@ export default function ProfilePage() {
               <CardTitle>Allergies</CardTitle>
             </CardHeader>
             <CardContent>
-              {patient?.data?.allergies?.length ? (
+              {patient?.allergies?.length ? (
                 <div className="space-y-2">
-                  {patient.data.allergies.map((allergy: any, idx: number) => (
+                  {patient.allergies.map((allergy: any, idx: number) => (
                     <div key={idx} className="flex items-center gap-2 p-2 bg-red-50 rounded">
                       <AlertTriangle className="h-4 w-4 text-red-600" />
                       <div>
@@ -258,13 +262,13 @@ export default function ProfilePage() {
               <CardTitle>Emergency Contact</CardTitle>
             </CardHeader>
             <CardContent>
-              {patient?.data?.emergencyContact ? (
+              {patient?.emergencyContact ? (
                 <div className="space-y-2">
-                  <p className="font-medium">{patient.data.emergencyContact.name}</p>
+                  <p className="font-medium">{patient.emergencyContact.name}</p>
                   <p className="text-sm text-gray-600">
-                    {patient.data.emergencyContact.relationship}
+                    {patient.emergencyContact.relationship}
                   </p>
-                  <p className="text-sm text-gray-600">{patient.data.emergencyContact.phone}</p>
+                  <p className="text-sm text-gray-600">{patient.emergencyContact.phone}</p>
                 </div>
               ) : (
                 <p className="text-gray-500 text-center py-4">No emergency contact on file</p>

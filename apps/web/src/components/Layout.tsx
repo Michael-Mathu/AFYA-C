@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },

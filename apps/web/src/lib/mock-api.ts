@@ -23,7 +23,9 @@ const USERS: Record<string, { password: string; user: any }> = {
 };
 
 const DOCTOR = USERS['doctor@afya-c.com'].user;
-const PATIENT = USERS['patient@afya-c.com'].user;
+// const PATIENT = USERS['patient@afya-c.com'].user;
+
+
 
 let appointments = [
   { id: 'a1', patientId: 'p001', doctorId: 'd001', typeId: 't1', status: 'SCHEDULED', appointmentDate: new Date(Date.now() + 86400000).toISOString().split('T')[0], reason: 'Annual checkup', createdAt: new Date().toISOString() },
